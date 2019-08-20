@@ -2,11 +2,33 @@ import React from 'react';
 import './App.css';
 
 class App extends React.Component {
+  constructor(){
+    super();
+    this.state = {
+      selectedNoteIndex: null,
+      selectedNote: null,
+      notes: null
+
+    };
+  }
 
 render(){
 return(
   <div>hello world</div>
 )
+componentDidMount = () => {
+firebase
+.firestore()
+.collection('notes')
+.onSnapshot(serverUpdate => {
+  const notes = serverUpdate.docs.map(doc => {
+    const data = _doc.data();
+    data['id'] = _doc.id;
+    return data;
+  });
+  this.setState({notes:notes})
+});
+}
 }
 
 }
