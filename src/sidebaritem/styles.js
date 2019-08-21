@@ -1,80 +1,58 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import styles from './styles';
-import List from '@material-ui/core/List';
-import { Divider, Button } from '@material-ui/core';
-import SidebarItemComponent from '../sidebaritem/sidebarItem';
-
-class SidebarComponent extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      addingNote: false,
-      title: null
-    };
-  }
-  render() {
-
-    const { notes, classes, selectedNoteIndex } = this.props;
-
-    if(notes) {
-      return(
-        <div className={classes.sidebarContainer}>
-          <Button
-            onClick={this.newNoteBtnClick}
-            className={classes.newNoteBtn}>{this.state.addingNote ? 'Cancel' : 'New Note'}</Button>
-            {
-              this.state.addingNote ? 
-              <div>
-                <input type='text'
-                  className={classes.newNoteInput}
-                  placeholder='Enter note title'
-                  onKeyUp={(e) => this.updateTitle(e.target.value)}>
-                </input>
-                <Button 
-                  className={classes.newNoteSubmitBtn}
-                  onClick={this.newNote}>Submit Note</Button>
-              </div> :
-              null
-            }
-            <List>
-              {
-                notes.map((_note, _index) => {
-                  return(
-                    <div key={_index}>
-                      <SidebarItemComponent
-                        _note={_note}
-                        _index={_index}
-                        selectedNoteIndex={selectedNoteIndex}
-                        selectNote={this.selectNote}
-                        deleteNote={this.deleteNote}>
-                      </SidebarItemComponent>
-                      <Divider></Divider>
-                    </div>
-                  )
-                })
-              }
-            </List>
-        </div>
-      );
-    } else {
-      return(<div></div>);
+const styles = theme => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    height: 'calc(100% - 35px)',
+    position: 'absolute',
+    left: '0',
+    width: '300px',
+    boxShadow: '0px 0px 2px black'
+  },
+  newChatBtn: {
+    borderRadius: '0px'
+  },
+  unreadMessage: {
+    color: 'red',
+    position: 'absolute',
+    top: '0',
+    right: '5px'
+  },
+  newNoteBtn: {
+    width: '100%',
+    height: '35px',
+    borderBottom: '1px solid black',
+    borderRadius: '0px',
+    backgroundColor: '#29487d',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#88a2ce'
     }
+  },
+  sidebarContainer: {
+    marginTop: '0px',
+    width: '300px',
+    height: '100%',
+    boxSizing: 'border-box',
+    float: 'left',
+    overflowY: 'scroll',
+    overflowX: 'hidden'
+  },
+  newNoteInput: {
+    width: '100%',
+    margin: '0px',
+    height: '35px',
+    outline: 'none',
+    border: 'none',
+    paddingLeft: '5px',
+    '&:focus': {
+      outline: '2px solid rgba(81, 203, 238, 1)'
+    }
+  },
+  newNoteSubmitBtn: {
+    width: '100%',
+    backgroundColor: '#28787c',
+    borderRadius: '0px',
+    color: 'white'
   }
+});
 
-  newNoteBtnClick = () => {
-    this.setState({ title: null, addingNote: !this.state.addingNote });
-  }
-  updateTitle = (txt) => {
-    this.setState({ title: txt });
-  }
-  newNote = () => {
-    this.props.newNote(this.state.title);
-    this.setState({ title: null, addingNote: false });
-  }
-  selectNote = (n, i) => this.props.selectNote(n, i);
-  deleteNote = (note) => this.props.deleteNote(note);
-
-}
-
-export default withStyles(styles)(SidebarComponent);
+export default styles;
